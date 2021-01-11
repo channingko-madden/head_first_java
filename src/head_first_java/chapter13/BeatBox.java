@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.sound.midi.*;
 import java.util.*;
 import java.awt.event.*;
+import java.io.*;
 
 public class BeatBox
 {
@@ -56,6 +57,16 @@ public class BeatBox
 		JButton downTempo = new JButton("Tempo Down");
 		downTempo.addActionListener(new MyDownTempoListener());
 		buttonBox.add(downTempo);
+
+		JButton saveBeat = new JButton("Save Beat");
+		saveBeat.addActionListener(new MySendListener());
+		buttonBox.add(saveBeat);
+
+		JButton loadBeat = new JButton("Load Beat");
+		loadBeat.addActionListener(new MyReadInListener());
+		buttonBox.add(loadBeat);
+
+
 
 		Box nameBox = new Box(BoxLayout.Y_AXIS); // box holds names of each drum instrument, located on the left hand side of gui
 		for (int i = 0; i < 16; i++)
@@ -153,6 +164,33 @@ public class BeatBox
 		}
 	}
 
+	public void makeTracks(int[] list)
+	{
+		for (int i = 0; i < 16; i++)
+		{
+			int key = list[i];
+			if (key != 0) 
+			{
+				mTrack.add(makeEvent(144,9,key, 100, i));
+				mTrack.add(makeEvent(128,9,key, 100, i+1));
+			}
+		}
+	}
+
+	public static MidiEvent makeEvent(int cmd, int chan, int one, int two, int tick)
+	{
+		try
+		{
+			ShortMessage a = new ShortMessage();
+			a.setMessage(cmd, chan, one, two);
+			return new MidiEvent(a, tick);
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
+	}
+
 	public class MyStartListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent a)
@@ -187,31 +225,77 @@ public class BeatBox
 		}
 	} // close inner class
 
-	public void makeTracks(int[] list)
+	/* from Chapter 14 pg 463. Class serializes a boolean array containing
+	 * checkbox data to save the beat. Happens when user presses Save button
+	 *
+	 * Add a File chooser to let user decide what file to save to!
+	 */
+	public class MySendListener implements ActionListener
 	{
-		for (int i = 0; i < 16; i++)
+		public void actionPerformed(ActionEvent a)
 		{
-			int key = list[i];
-			if (key != 0) 
+			boolean[] checkboxState = new boolean[256];
+			for (int i = 0; i < 256; i++)
 			{
-				mTrack.add(makeEvent(144,9,key, 100, i));
-				mTrack.add(makeEvent(128,9,key, 100, i+1));
+				JCheckBox check = (JCheckBox) mCheckboxList.get(i);
+				if (check.isSelected())
+				{
+					checkboxState[i] = true;
+				}
+			}
+
+			JFileChooser fileSave = new JFileChooser();
+			fileSave.showSaveDialog(mTheFrame); // dialog shows up in the frame for user
+
+			try
+			{
+				FileOutputStream fileStream = new FileOutputStream(fileSave.getSelectedFile());
+				ObjectOutputStream os = new ObjectOutputStream(fileStream);
+				os.writeObject(checkboxState);
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
 			}
 		}
 	}
 
-	public static MidiEvent makeEvent(int cmd, int chan, int one, int two, int tick)
-	{
-		try
+	// from Chapter 14 pg 464. Class deserializes a boolean array containing
+	// checkbox data to restore the beats contained within mCheckboxList. Happens when user presses Restore button
+	public class MyReadInListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent a)
 		{
-			ShortMessage a = new ShortMessage();
-			a.setMessage(cmd, chan, one, two);
-			return new MidiEvent(a, tick);
-		}
-		catch(Exception e)
-		{
-			return null;
+			boolean[] checkboxState = null;
+			JFileChooser fileOpen = new JFileChooser();
+			fileOpen.showOpenDialog(mTheFrame);
+			try
+			{
+				FileInputStream fileIn = new FileInputStream(fileOpen.getSelectedFile());
+				ObjectInputStream is = new ObjectInputStream(fileIn);
+				checkboxState = (boolean[]) is.readObject(); // cast to boolean array object
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+
+			for(int i = 0; i < 256; i++)
+			{
+				JCheckBox check = (JCheckBox) mCheckboxList.get(i);
+				if(checkboxState[i])
+				{
+					check.setSelected(true);
+				}
+				else
+				{
+					check.setSelected(false);
+				}
+			}
+			mSequencer.stop(); // shouldn't this happen before changing the state of the checkboxes?
+			buildTrackAndStart();
 		}
 	}
+
 
 }
