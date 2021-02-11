@@ -9,11 +9,11 @@ public interface ServiceServer extends Remote
 {
 
 	/** @brief Client calls this method to get a list of services to display in the browser 
-	 *  @return List of objects (Strings) */
+	 *  @return List of available services as Strings */
 	Object[] getServiceList() throws RemoteException;
 
 	/** @brief Client calls this method to get the corresponding service
-	 *  @param[in] serviceKey Key to corresponding service (should be String)
+	 *  @param[in] serviceKey Key to corresponding service 
 	 *  @return Service object */
-	Service getService(Object serviceKey) throws RemoteException;
+	Service getService(String serviceKey) throws RemoteException;
 }

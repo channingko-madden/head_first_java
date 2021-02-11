@@ -13,8 +13,9 @@ import java.io.*;
 
 public class DiceService implements Service
 {
+	private static final long serialVersionUID = 1L;
 	JLabel mLabel;
-	JComboBox mNumOfDice;
+	JComboBox<String> mNumOfDice;
 	JPanel mDicePanel;
 
 	public JPanel getGuiPanel()
@@ -23,7 +24,7 @@ public class DiceService implements Service
 		JPanel panel = new JPanel(new GridBagLayout());
 		JButton button = new JButton("Roll!"); // Create a button that user presses to roll the dice
 		String[] choices = {"1", "2", "3", "4", "5"}; // # of dice choices for JComboBox
-		mNumOfDice = new JComboBox(choices);
+		mNumOfDice = new JComboBox<String>(choices);
 		mLabel = new JLabel("Dice values here"); // Label used to display dice roll values in a single formatted single
 		button.addActionListener(new RollListener());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -70,6 +71,7 @@ public class DiceService implements Service
 	 *  @return Dice JPanel to add to another panel */
 	public class DicePanel extends JPanel 
 	{
+		private static final long serialVersionUID = 1L;
 		private int mRoll;
 
 		public DicePanel(int roll)

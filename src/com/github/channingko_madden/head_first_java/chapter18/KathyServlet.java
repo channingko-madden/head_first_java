@@ -1,8 +1,10 @@
+package com.github.channingko_madden.head_first_java.chapter18;
+
 /** @brief Servlet that uses the PhraseOMatic pg 629
  *  Requires javax.servlet */
 
+/*
 import java.io.*;
-
 import javax.servlet.*;
 import javax.servlet.http.*;
 
@@ -26,3 +28,5 @@ public class KathyServlet extends HttpServlet
 		out.close();
 	}
 }
+
+*/

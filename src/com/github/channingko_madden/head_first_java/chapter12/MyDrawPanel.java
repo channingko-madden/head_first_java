@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter12;
+
 /** @brief Panel that draws oval with a random color */
 
 import java.awt.*;
@@ -5,6 +7,8 @@ import javax.swing.*;
 
 class MyDrawPanel extends JPanel
 {
+	private static final long serialVersionUID = 1L;
+
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2d = (Graphics2D) g;

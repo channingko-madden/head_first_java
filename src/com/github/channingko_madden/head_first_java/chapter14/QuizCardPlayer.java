@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter14;
+
 /** @brief Quiz Card Player pg 456 */
 
 import java.util.*;
@@ -9,7 +11,7 @@ import java.io.*;
 public class QuizCardPlayer {
 
 	private JTextArea display;
-	private JTextArea answer;
+	//private JTextArea answer;
 	private ArrayList<QuizCard> cardList;
 	private QuizCard currentCard;
 	private int currentCardIndex;

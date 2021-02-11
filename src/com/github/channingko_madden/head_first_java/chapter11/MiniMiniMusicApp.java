@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter11;
+
 /** @brief Very first sound player app (pg 342) */
 
 import javax.sound.midi.*;

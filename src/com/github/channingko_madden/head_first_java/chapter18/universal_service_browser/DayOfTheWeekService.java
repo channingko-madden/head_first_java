@@ -12,8 +12,9 @@ import java.text.*;
 
 public class DayOfTheWeekService implements Service
 {
+	private static final long serialVersionUID = 1L;
 	JLabel mOutputLabel;
-	JComboBox mMonthBox;
+	JComboBox<String> mMonthBox;
 	JTextField mDayText;
 	JTextField mYearText;
 
@@ -23,7 +24,7 @@ public class DayOfTheWeekService implements Service
 		button.addActionListener(new DoItListener());
 		mOutputLabel = new JLabel("Day of Week appears here");
 		DateFormatSymbols dateStuff = new DateFormatSymbols();
-		mMonthBox = new JComboBox(dateStuff.getMonths());
+		mMonthBox = new JComboBox<String>(dateStuff.getMonths());
 		mDayText = new JTextField(8);
 		mYearText = new JTextField(8);
 

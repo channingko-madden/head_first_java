@@ -1,10 +1,11 @@
+package com.github.channingko_madden.head_first_java.chapter12;
+
 /** @brief Example for creating MidiEvents using a static method
  *  and listening for Controller events using an inner class,
  *  which will create gui stufff in time with the beat like
  *  a music video */
 
 import javax.sound.midi.*;
-import java.io.*;
 import javax.swing.*; //gui stuff
 import java.awt.*; //for event stuff
 
@@ -74,6 +75,7 @@ public class MiniMusicPlayer3
 
 	class MyDrawPanel extends JPanel implements ControllerEventListener
 	{
+		private static final long serialVersionUID = 1L;
 		private boolean msg = false; // should be atomic to be thread safe
 
 		/** @brief ControllerEventListener interface method */

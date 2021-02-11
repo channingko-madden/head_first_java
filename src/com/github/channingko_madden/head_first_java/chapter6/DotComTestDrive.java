@@ -1,3 +1,4 @@
+package com.github.channingko_madden.head_first_java.chapter6;
 
 /** @brief DotComTestDrive is a test class for testing
  *  the DotCom class */

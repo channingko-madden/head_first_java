@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter6;
+
 /** @brief DotCom class represents a "battleship" in 
  *  the board game Battleship. An object will take up 3 cells of the
  *  board, and is sunk when all three cells have been discovered.

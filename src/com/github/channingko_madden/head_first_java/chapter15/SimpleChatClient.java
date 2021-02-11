@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter15;
+
 /** @brief SimpleChatClient that can only send messages, not receive them */
 
 import java.io.*;
@@ -7,7 +9,7 @@ import javax.swing.*; // gui stuff
 import java.awt.*;
 import java.awt.event.*;
 
-public class SimpleChatClientA
+public class SimpleChatClient
 {
 	JTextField outgoing;
 	PrintWriter writer;
@@ -56,7 +58,7 @@ public class SimpleChatClientA
 		try
 		{
 			socket = new Socket("127.0.0.1", 5000);
-			InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
+			InputStreamReader streamReader = new InputStreamReader(socket.getInputStream());
 			reader = new BufferedReader(streamReader);
 			writer = new PrintWriter(socket.getOutputStream());
 			System.out.println("networking established");
@@ -99,12 +101,12 @@ public class SimpleChatClientA
 					System.out.println("read " + message);
 					incoming.append(message + "\n");
 				}
-				catch(Exception ex)
-				{
-					ex.printStackTrace();
-				}
-
 			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+
 		}
 	}
 

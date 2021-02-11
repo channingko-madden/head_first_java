@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter13;
+
 /** @brief Scrolling text area example */
 
 import javax.swing.*;

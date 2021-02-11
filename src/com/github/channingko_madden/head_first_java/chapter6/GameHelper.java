@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter6;
+
 /** @brief Ready bake code for interacting with a user on the command line */
 
 import java.io.*;

@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter15;
+
 /** @brief SimpleChatClient that can only send messages, not receive them */
 
 import java.io.*;

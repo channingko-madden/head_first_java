@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter18;
+
 /**@brief Phrase0Matic for use by servlet */
 
 public class PhraseOMatic
@@ -26,9 +28,9 @@ public class PhraseOMatic
 		int rand3 = (int) (Math.random() * threeLength);
 
 		// now build a phrase
-		String phrase = wordListOne[rand1] + “ “ + wordListTwo[rand2] + “ “ +
+		String phrase = wordListOne[rand1] + " " + wordListTwo[rand2] + " " +
 		wordListThree[rand3];
 
-		return (“What we need is a “ + phrase);
+		return ("What we need is a " + phrase);
 	}
 }

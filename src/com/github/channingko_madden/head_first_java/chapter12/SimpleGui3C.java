@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter12;
+
 /** @brief Change color of circle each time button is pressed */
 
 import javax.swing.*;

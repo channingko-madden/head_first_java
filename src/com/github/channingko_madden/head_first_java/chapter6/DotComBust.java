@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter6;
+
 /** @brief DotComBust contains main() method for launching the
  *  DotComBust Game (aka 1D battleship) */
 
@@ -9,7 +11,7 @@ public class DotComBust
 	private ArrayList<DotCom> dotComsList = new ArrayList<DotCom>();
 	private int numOfGuesses = 0;
 
-	private void setUpGame()
+	public void setUpGame()
 	{
 		// make some DotCom objects and give them names/locations
 		DotCom one = new DotCom();

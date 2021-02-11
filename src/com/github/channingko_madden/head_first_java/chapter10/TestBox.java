@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter10;
+
 /** @brief Sharpen your pencil on page 291 
  *  When run, main throws a java.lang.NullPointerException b/c
  *  Integer wrapper class reference is null when default

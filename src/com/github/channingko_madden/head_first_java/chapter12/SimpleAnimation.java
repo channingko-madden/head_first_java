@@ -1,8 +1,9 @@
+package com.github.channingko_madden.head_first_java.chapter12;
+
 /** @brief Two button gui */
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class SimpleAnimation
 {
@@ -43,6 +44,8 @@ public class SimpleAnimation
 
 	class MyDrawPanel extends JPanel
 	{
+		private static final long serialVersionUID = 1L;
+
 		public void paintComponent(Graphics g)
 		{
 			g.setColor(Color.white);

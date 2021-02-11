@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter13;
+
 /** @brief Beat Box Chapter13 version
  *  Creates 16 beat MIDI based on user input
  *  and plays */
@@ -154,7 +156,7 @@ public class BeatBox
 		try
 		{
 			mSequencer.setSequence(mSequence);
-			mSequencer.setLoopCount(mSequencer.LOOP_CONTINUOUSLY);
+			mSequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
 			mSequencer.start();
 			mSequencer.setTempoInBPM(120);
 		}

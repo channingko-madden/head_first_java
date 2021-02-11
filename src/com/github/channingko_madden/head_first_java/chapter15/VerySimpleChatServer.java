@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter15;
+
 /** @brief Very simple chat server (pg 520)
  *  Works with both simple chat client examples
  *  Commenting code is a "Sharpen your pencil" task
@@ -13,7 +15,7 @@ import java.util.*;
 
 public class VerySimpleChatServer
 {
-	ArrayList clientOutputStreams; // no type needed?
+	private ArrayList<PrintWriter> clientOutputStreams; // no type needed?
 
 	public class ClientHandler implements Runnable
 	{
@@ -55,14 +57,9 @@ public class VerySimpleChatServer
 		}
 	}
 
-	public static void main (String[] args)
-	{
-		new VerySimpleChatServer().go();
-	}
-
 	public void go()
 	{
-		clientOutputStreams = new ArrayList(); // no type needed?
+		clientOutputStreams = new ArrayList<PrintWriter>(); // no type needed?
 
 		try
 		{
@@ -81,19 +78,20 @@ public class VerySimpleChatServer
 		{
 			ex.printStackTrace();
 		}
+		
 	}
 
 	/** @brief Send a message string to all connected clients
 	 *  @param[in] message */
 	public void tellEveryone(String message)
 	{
-		Iterator it = clientOutputStreams.iterator();
+		Iterator<PrintWriter> it = clientOutputStreams.iterator();
 
 		while(it.hasNext()) // iterate through all client connections
 		{
 			try
 			{
-				PrintWriter writer = (PrintWriter) it.next();
+				PrintWriter writer = it.next();
 				writer.println(message);
 				writer.flush();
 			}
@@ -103,4 +101,9 @@ public class VerySimpleChatServer
 			}
 		} 
 	} 
+
+	public static void main (String[] args)
+	{
+		new VerySimpleChatServer().go();
+	}
 }

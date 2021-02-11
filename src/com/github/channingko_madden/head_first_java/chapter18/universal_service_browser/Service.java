@@ -1,4 +1,4 @@
-/** @brief Part of the Universal Service Browswer
+/** @brief Part of the Universal Service Browser
  *  Interface defines the single method for a universal service.
  *  Extends Serializable so implementations are Serializable, because a Service is shipped over wire via RMI */
 

@@ -7,12 +7,13 @@ package com.github.channingko_madden.head_first_java.chapter18.universal_service
 import java.awt.*;
 import javax.swing.*;
 import java.rmi.*;
+import java.util.Arrays;
 import java.awt.event.*;
 
 public class ServiceBrowser
 {
 	JPanel mMainPanel;
-	JComboBox mServiceList;
+	JComboBox<String> mServiceList;
 	ServiceServer mServer;
 
 	public void buildGUI()
@@ -23,8 +24,9 @@ public class ServiceBrowser
 		frame.getContentPane().add(BorderLayout.CENTER, mMainPanel);
 
 		Object[] services = getServicesList(); // no null check?
+		String[] string_services = Arrays.stream(services).toArray(String[]::new);
 
-		mServiceList = new JComboBox(services); // JComboBox knows how to make displayable Strings out of Objects
+		mServiceList = new JComboBox<String>(string_services); // JComboBox knows how to make displayable Strings out of Objects
 
 		frame.getContentPane().add(BorderLayout.NORTH, mServiceList);
 
@@ -34,7 +36,7 @@ public class ServiceBrowser
 		frame.setVisible(true);
 	}
 
-	private void loadService(Object serviceSelection)
+	private void loadService(String serviceSelection)
 	{
 		try
 		{
@@ -88,7 +90,7 @@ public class ServiceBrowser
 		/** @brief Load the appropriate service when the user selects it */
 		public void actionPerformed(ActionEvent ev)
 		{
-			Object selection = mServiceList.getSelectedItem();
+			String selection = (String) mServiceList.getSelectedItem();
 			loadService(selection);
 		}
 	}

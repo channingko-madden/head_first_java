@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter11;
+
 /** @brief Use CLI arguments to choose the instrument and note to play (pg 346) */
 
 import javax.sound.midi.*;

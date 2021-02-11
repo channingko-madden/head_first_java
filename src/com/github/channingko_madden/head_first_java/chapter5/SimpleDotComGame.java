@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter5;
+
 /** @brief SimpleDotComGame contains main() method for launching the
  *  SimpleDotCom Game (aka 1D battleship) */
 

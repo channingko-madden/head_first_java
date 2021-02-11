@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter12;
+
 /** @brief Playing around creating a widget
  *  Pass a CLI argument of 1, 2, 3, or 4 to display
  *  a rectange, jpeg, circle, gradient circle */
@@ -7,6 +9,7 @@ import javax.swing.*;
 
 public class SimpleWidget extends JPanel
 {
+	private static final long serialVersionUID = 1L;
 	private int m_cli_arg;
 
 	public static void main(String[] args)

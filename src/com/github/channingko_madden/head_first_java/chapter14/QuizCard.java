@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter14;
+
 /** @brief QuizCard class 
  *  Holds QuizCard data */
 

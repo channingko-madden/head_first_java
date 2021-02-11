@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter12;
+
 /** @brief Example for creating MidiEvents using a static method */
 
 import javax.sound.midi.*;

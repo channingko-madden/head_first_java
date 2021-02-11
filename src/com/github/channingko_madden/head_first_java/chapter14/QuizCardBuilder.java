@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter14;
+
 /** @brief Quiz card builder example pg 450
  *  Good example of MenuVar, Menu, and MenuItems */
 

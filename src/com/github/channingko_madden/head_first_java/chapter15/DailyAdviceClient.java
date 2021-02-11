@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter15;
+
 /** @brief DailyAdviceClient creates a socket connection to
  * localhost port 4242 and reads a line. (pg 481) */
 

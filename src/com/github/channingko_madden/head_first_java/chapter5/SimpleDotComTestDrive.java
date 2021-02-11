@@ -1,3 +1,4 @@
+package com.github.channingko_madden.head_first_java.chapter5;
 
 /** @brief SimpleDotComTestDrive is a test class for testing
  *  the SimpleDotCom class */

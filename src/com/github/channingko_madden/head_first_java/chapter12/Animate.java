@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter12;
+
 /** @brief The Amazing, Shrinking, Blue Rectangle (pg 396) */
 
 import javax.swing.*;
@@ -40,6 +42,8 @@ public class Animate
 
 	class MyDrawP extends JPanel
 	{
+		private static final long serialVersionUID = 1L;
+
 		public void paintComponent(Graphics g)
 		{
 			g.setColor(Color.white);

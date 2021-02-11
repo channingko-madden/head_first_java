@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter18;
+
 /** @brief Example remote service implementation pg 619 */
 
 import java.rmi.*;
@@ -5,9 +7,13 @@ import java.rmi.server.*;
 
 public class MyRemoteImpl extends UnicastRemoteObject implements MyRemote
 {
+
 	// Required to have no-arg constructor that throws RemoteException (For UnicastRemoteObject)
-	public MyRemoteImpl() throws RemoteException()
+	private static final long serialVersionUID = 1L;
+
+	public MyRemoteImpl() throws RemoteException
 	{
+		super();
 	}
 
 	public String sayHello() // dont have to declare RemoteException here (yay!)

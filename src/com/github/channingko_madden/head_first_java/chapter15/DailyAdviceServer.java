@@ -1,3 +1,5 @@
+package com.github.channingko_madden.head_first_java.chapter15;
+
 /** @brief DailyAdviceServer offers a service on the localhost
  * at port 4242, which sends a string to a client when a client connects
  * to the service  */
