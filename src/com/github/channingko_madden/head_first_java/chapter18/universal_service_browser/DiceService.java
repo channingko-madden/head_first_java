@@ -9,7 +9,6 @@ package com.github.channingko_madden.head_first_java.chapter18.universal_service
 import javax.swing.*;
 import java.awt.*; //for event stuff
 import java.awt.event.*;
-import java.io.*;
 
 public class DiceService implements Service
 {
@@ -17,14 +16,18 @@ public class DiceService implements Service
 	JLabel mLabel;
 	JComboBox<String> mNumOfDice;
 	JPanel mDicePanel;
+	JPanel mServicePanel;
 
 	public JPanel getGuiPanel()
 	{
 		mDicePanel = new JPanel();
-		JPanel panel = new JPanel(new GridBagLayout());
+		mDicePanel.setPreferredSize(new Dimension(300, 60));
+		mServicePanel = new JPanel(new GridBagLayout());
 		JButton button = new JButton("Roll!"); // Create a button that user presses to roll the dice
+		button.setPreferredSize(new Dimension(100, 25));
 		String[] choices = {"1", "2", "3", "4", "5"}; // # of dice choices for JComboBox
 		mNumOfDice = new JComboBox<String>(choices);
+		mNumOfDice.setPreferredSize(new Dimension(100, 25));
 		mLabel = new JLabel("Dice values here"); // Label used to display dice roll values in a single formatted single
 		button.addActionListener(new RollListener());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -32,16 +35,16 @@ public class DiceService implements Service
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.weightx = 0.5;
-		panel.add(mNumOfDice, constraints);
+		mServicePanel.add(mNumOfDice, constraints);
 		constraints.gridx = 1;
-		panel.add(button, constraints);
+		mServicePanel.add(button, constraints);
 		//panel.add(mLabel);
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.weightx = 0.0;
 		constraints.gridwidth = 2;
-		panel.add(mDicePanel, constraints);
-		return panel;
+		mServicePanel.add(mDicePanel, constraints);
+		return mServicePanel;
 	}
 
 	/** @brief Listens to "Roll" button presses */
@@ -63,6 +66,7 @@ public class DiceService implements Service
 			mDicePanel.validate();
 			mDicePanel.repaint();
 			mLabel.setText(diceOutput);
+			mServicePanel.repaint();
 		}
 	}
 
@@ -73,6 +77,7 @@ public class DiceService implements Service
 	{
 		private static final long serialVersionUID = 1L;
 		private int mRoll;
+		private final int mSpace = 2;
 
 		public DicePanel(int roll)
 		{
@@ -94,17 +99,70 @@ public class DiceService implements Service
 		}
 
 		
+		/** @brief A Dice is essentially a 3x3 grid of dots
+		 *  Use private methods to construct a dice face by painting each dot */
 		private void drawDots(Graphics g)
 		{
 			g.setColor(Color.black);
-			int dot_height = (this.getHeight() - 8) / 3;
-			int dot_width = (this.getWidth() - 8) / 3;
+			int dot_height = (this.getHeight() - (4 * mSpace)) / 3;
+			int dot_width = (this.getWidth() - (4 * mSpace)) / 3;
 			if(mRoll == 1)
 			{
-				g.fillOval((this.getWidth() - dot_width)/2, (this.getHeight() - dot_height)/2, dot_width, dot_height);
+				drawGridDot(g, dot_width, dot_height, mSpace, 1, 1);
 			}
-			
+			else if(mRoll == 2)
+			{
+				drawGridDot(g, dot_width, dot_height, mSpace, 0, 0);
+				drawGridDot(g, dot_width, dot_height, mSpace, 2, 2);
+			}
+			else if(mRoll == 3)
+			{
+				drawGridDot(g, dot_width, dot_height, mSpace, 0, 0);
+				drawGridDot(g, dot_width, dot_height, mSpace, 1, 1);
+				drawGridDot(g, dot_width, dot_height, mSpace, 2, 2);
+			}
+			else if(mRoll == 4)
+			{
+				drawGridDot(g, dot_width, dot_height, mSpace, 0, 0);
+				drawGridDot(g, dot_width, dot_height, mSpace, 2, 0);
+				drawGridDot(g, dot_width, dot_height, mSpace, 2, 2);
+				drawGridDot(g, dot_width, dot_height, mSpace, 0, 2);
+			}
+			else if(mRoll == 5)
+			{
+				drawGridDot(g, dot_width, dot_height, mSpace, 0, 0);
+				drawGridDot(g, dot_width, dot_height, mSpace, 0, 2);
+				drawGridDot(g, dot_width, dot_height, mSpace, 1, 1);
+				drawGridDot(g, dot_width, dot_height, mSpace, 2, 2);
+				drawGridDot(g, dot_width, dot_height, mSpace, 2, 0);
+			}
+			else if(mRoll == 6)
+			{
+				drawGridDot(g, dot_width, dot_height, mSpace, 0, 0);
+				drawGridDot(g, dot_width, dot_height, mSpace, 0, 1);
+				drawGridDot(g, dot_width, dot_height, mSpace, 0, 2);
+				drawGridDot(g, dot_width, dot_height, mSpace, 2, 0);
+				drawGridDot(g, dot_width, dot_height, mSpace, 2, 1);
+				drawGridDot(g, dot_width, dot_height, mSpace, 2, 2);
+			}
 		}
+		
 
+		/** @brief A Dice is a 3x3 grid of dots
+		 *  Draw a dot at a particular row/column location
+		 *  @param[in] g Graphics to draw on
+		 *  @param[in] width Width of Dot
+		 *  @param[in] height Height of Dot
+		 *  @param[in] space Space between dots
+		 *  @param[in] row [0-2] Row index
+		 *  @param[in] column [0-2] Column index */
+		private void drawGridDot(Graphics g, int width, int height, int space, int row, int column)
+		{
+
+			int start_x = (this.getWidth() - width)/2 - space - width;
+			int start_y = (this.getHeight() - height)/2 - space - height;
+			g.fillOval(start_x + row * (width + space), start_y + column * (height + space), width, height);
+		}
+		
 	}
 }

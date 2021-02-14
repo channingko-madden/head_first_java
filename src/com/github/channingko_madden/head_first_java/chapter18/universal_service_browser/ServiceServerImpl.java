@@ -1,5 +1,7 @@
 /** @brief Part of Universal Service Browser
- *  Implementation of ServiceServer for the RMI */
+ *  Implementation of ServiceServer for the RMI 
+ *  
+ *  For local testing, launch rmiregistry rom the /classes folder */
 
 package com.github.channingko_madden.head_first_java.chapter18.universal_service_browser; 
 
