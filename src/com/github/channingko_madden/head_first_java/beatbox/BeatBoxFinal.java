@@ -6,10 +6,10 @@ package com.github.channingko_madden.head_first_java.beatbox;
  * 
  * Sharpen Your Pencil tasks:
  *   1) When you select a pattern, your current pattern is lost w/out saving. Create a pop up dialog box that
- *      asks the user to save the pattern if desired.
- *   2) If user doesn't pass a command line argument is raises and exception. Fix this (DONE)
+ *      asks the user to save the pattern if desired. (Done)
+ *   2) If user doesn't pass a command line argument is raises and exception. Fix this. (DONE)
  *   3) Create a button that lets you load an exisiting "foundation" pattern (aka drum pattern) for a music style,
- *      such as Jazz, rock, reggae.
+ *      such as Jazz, rock, reggae. (Done, can use load button)
  */
 
 import java.awt.*;
@@ -109,6 +109,10 @@ public class BeatBoxFinal
 		JButton downTempo = new JButton("Tempo Down");
 		downTempo.addActionListener(new MyDownTempoListener());
 		buttonBox.add(downTempo);
+		
+		JButton clearBeat = new JButton("Clear");
+		clearBeat.addActionListener(new MyClearBeatListener());
+		buttonBox.add(clearBeat);
 
 		JButton saveBeat = new JButton("Save Beat");
 		saveBeat.addActionListener(new MySaveListener());
@@ -118,7 +122,7 @@ public class BeatBoxFinal
 		loadBeat.addActionListener(new MyReadInListener());
 		buttonBox.add(loadBeat);
 		
-		JButton sendIt = new JButton("sendIt");
+		JButton sendIt = new JButton("Send Beat");
 		sendIt.addActionListener(new MySendListener());
 		buttonBox.add(sendIt);
 		
@@ -187,16 +191,34 @@ public class BeatBoxFinal
 
 	public void buildTrackAndStart()
 	{
+		buildTrack();
+		try
+		{
+			mSequencer.setSequence(mSequence);
+			mSequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
+			mSequencer.start();
+			mSequencer.setTempoInBPM(120);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Build a track but don't start the sequencer
+	 */
+	private void buildTrack()
+	{
 		/* 16 element array to hold values for one instrument across all 16 beats
 		 * If playing on a beat, the value at that element will be the instrument key,
 		 * otherwise set to 0 */
-		int[] trackList = null;
 
 		mSequence.deleteTrack(mTrack);  // delete old track so we can make a new one.
 		mTrack = mSequence.createTrack();
 		for (int i = 0; i < 16; i++) // for each instrument
 		{
-			trackList = new int[16];
+			int[] trackList = new int[16];
 			for (int j = 0; j < 16; j++ ) // for each beat
 			{
 				JCheckBox jc = mCheckboxList.get(16*i + j); 
@@ -215,17 +237,6 @@ public class BeatBoxFinal
 		}
 
 		mTrack.add(makeEvent(192,9,1,0,15)); // program change command, make sure always go full 16 beats
-		try
-		{
-			mSequencer.setSequence(mSequence);
-			mSequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
-			mSequencer.start();
-			mSequencer.setTempoInBPM(120);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 
 	public void makeTracks(int[] list)
@@ -272,17 +283,49 @@ public class BeatBoxFinal
 	
 	public void changeSequence(boolean[] checkboxState)
 	{
-		for(int i = 0; i < 256; i++)
+		for(int i = 0; i < checkboxState.length; i++)
 		{
 			JCheckBox check = mCheckboxList.get(i);
 			check.setSelected(checkboxState[i]);
 		}
+	}
+	
+	private void saveBeat()
+	{
+		boolean[] checkboxState = new boolean[mCheckboxList.size()];
+		for (int i = 0; i < checkboxState.length; i++)
+		{
+			JCheckBox check = (JCheckBox) mCheckboxList.get(i);
+			if (check.isSelected())
+			{
+				checkboxState[i] = true;
+			}
+		}
+
+		JFileChooser fileSave = new JFileChooser();
+		fileSave.showSaveDialog(mTheFrame); // dialog shows up in the frame for user
+
+		try
+		{
+			FileOutputStream fileStream = new FileOutputStream(fileSave.getSelectedFile());
+			ObjectOutputStream os = new ObjectOutputStream(fileStream);
+			os.writeObject(checkboxState);
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
 	}
 
 	public class MyStartListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent a)
 		{
+			if(mSequencer.isRunning())
+			{
+				mSequencer.stop();
+			}
 			buildTrackAndStart();
 		}
 	}
@@ -291,9 +334,12 @@ public class BeatBoxFinal
 	{
 		public void actionPerformed(ActionEvent a)
 		{
-			mSequencer.stop();
+			if(mSequencer.isRunning())
+			{
+				mSequencer.stop();
+			}
 		}
-	} // close inner class
+	} 
 
 	public class MyUpTempoListener implements ActionListener
 	{
@@ -302,7 +348,7 @@ public class BeatBoxFinal
 			float tempoFactor = mSequencer.getTempoFactor();
 			mSequencer.setTempoFactor((float)(tempoFactor * 1.03)); // scales BPM tempo that was set previously
 		}
-	} // close inner class
+	} 
 
 	public class MyDownTempoListener implements ActionListener
 	{
@@ -311,7 +357,26 @@ public class BeatBoxFinal
 			float tempoFactor = mSequencer.getTempoFactor();
 			mSequencer.setTempoFactor((float)(tempoFactor * .97));
 		}
-	} // close inner class
+	} 
+	
+	/*
+	 * Listener for Clear Button, that does not stop a beat that's playing, it only clears all the
+	 * checkboxes.
+	 */
+	public class MyClearBeatListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent a)
+		{
+			mSequence.deleteTrack(mTrack);
+			mTrack = mSequence.createTrack();
+			Iterator<JCheckBox> iter = mCheckboxList.iterator();
+			while(iter.hasNext())
+			{
+				iter.next().setSelected(false);
+			}
+
+		}
+	}
 
 	/* from Chapter 14 pg 463. Class serializes a boolean array containing
 	 * checkbox data to save the beat. Happens when user presses Save button
@@ -322,29 +387,7 @@ public class BeatBoxFinal
 	{
 		public void actionPerformed(ActionEvent a)
 		{
-			boolean[] checkboxState = new boolean[256];
-			for (int i = 0; i < 256; i++)
-			{
-				JCheckBox check = (JCheckBox) mCheckboxList.get(i);
-				if (check.isSelected())
-				{
-					checkboxState[i] = true;
-				}
-			}
-
-			JFileChooser fileSave = new JFileChooser();
-			fileSave.showSaveDialog(mTheFrame); // dialog shows up in the frame for user
-
-			try
-			{
-				FileOutputStream fileStream = new FileOutputStream(fileSave.getSelectedFile());
-				ObjectOutputStream os = new ObjectOutputStream(fileStream);
-				os.writeObject(checkboxState);
-			}
-			catch(Exception ex)
-			{
-				ex.printStackTrace();
-			}
+			saveBeat();
 		}
 	}
 
@@ -355,6 +398,11 @@ public class BeatBoxFinal
 
 		public void actionPerformed(ActionEvent a)
 		{
+			if(mSequencer.isRecording())
+			{
+				mSequencer.stop(); // shouldn't this happen before changing the state of the checkboxes?
+			}
+
 			boolean[] checkboxState = null;
 			JFileChooser fileOpen = new JFileChooser();
 			fileOpen.showOpenDialog(mTheFrame);
@@ -369,7 +417,7 @@ public class BeatBoxFinal
 				ex.printStackTrace();
 			}
 
-			for(int i = 0; i < 256; i++)
+			for(int i = 0; i < checkboxState.length; i++)
 			{
 				JCheckBox check = (JCheckBox) mCheckboxList.get(i);
 				if(checkboxState[i])
@@ -381,8 +429,6 @@ public class BeatBoxFinal
 					check.setSelected(false);
 				}
 			}
-			mSequencer.stop(); // shouldn't this happen before changing the state of the checkboxes?
-			buildTrackAndStart();
 		}
 	}
 	
@@ -394,10 +440,10 @@ public class BeatBoxFinal
 	{
 		public void actionPerformed(ActionEvent a)
 		{
-			boolean[] checkboxState = new boolean[256];
-			for (int i = 0; i < 256; i++)
+			boolean[] checkboxState = new boolean[mCheckboxList.size()];
+			for (int i = 0; i < checkboxState.length; i++)
 			{
-				JCheckBox check = (JCheckBox) mCheckboxList.get(i);
+				JCheckBox check = mCheckboxList.get(i);
 				if (check.isSelected())
 				{
 					checkboxState[i] = true;
@@ -419,6 +465,9 @@ public class BeatBoxFinal
 	/**
 	 * @brief This listener waits for the user to make a selection on the list of messages sent by other people.
 	 * When the user selects a message, the associated beat pattern is loaded and starts playing.
+	 * 
+	 * Sharpen Your Pencil #1: A popup dialog is shown to ask the user if they want to save their current 
+	 * beat pattern before loading the new pattern (and thus losing the current pattern).
 	 */
 	public class MyListSelectionListener implements ListSelectionListener 
 	{
@@ -426,15 +475,61 @@ public class BeatBoxFinal
 		{
 			if(!le.getValueIsAdjusting())
 			{
-				String selected = mIncomingList.getSelectedValue();
-				if(selected != null)
+				
+				if(!mIncomingList.isSelectionEmpty())
 				{
-					// go to the map and change the sequence
-					boolean[] selectedState =  mOtherSeqsMap.get(selected);
-					changeSequence(selectedState);
-					mSequencer.stop();
-					buildTrackAndStart();
+					// popup dialog asking user to save their pattern or not
+					final int dialogResult = JOptionPane.showConfirmDialog(mTheFrame, "Do you want to save the current beat before loading a new one?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION);
+					switch(dialogResult) 
+					{
+						case JOptionPane.YES_OPTION:
+						{
+							saveBeat();
+							break;
+						}
+						case JOptionPane.NO_OPTION:
+						{
+							break;
+						}
+						case JOptionPane.CANCEL_OPTION:
+						{
+							mIncomingList.clearSelection(); // lets user reselect the same selection
+							return; // return before load code executes
+						}
+						default:
+						{
+							break;
+						}
+					}
+				
+					String selected = mIncomingList.getSelectedValue();
+					if(selected != null)
+					{
+						// go to the map and change the sequence
+						boolean[] selectedState =  mOtherSeqsMap.get(selected);
+						if(selectedState != null)
+						{
+							System.out.println("job");
+							mSequencer.stop();
+							changeSequence(selectedState);
+							buildTrack();
+						}
+						else
+						{
+							System.out.println("That beat is empty");
+						}
+					}
+					else
+					{
+						System.out.println("Failed to get selected value");
+					}
+					mIncomingList.clearSelection(); // lets user reselect the same selection
 				}
+				else
+				{
+					System.out.println("Selection is empty");
+				}
+				
 			}
 		}
 	}
@@ -462,6 +557,7 @@ public class BeatBoxFinal
 					mOtherSeqsMap.put(nameToShow, checkboxState);
 					mListVector.add(nameToShow); // have to update this vector then set it to JList after
 					mIncomingList.setListData(mListVector);
+					mIncomingList.clearSelection();
 				}
 			}
 			catch (Exception ex)
